@@ -1,0 +1,69 @@
+CREATING JSON
+
+import json
+dict={
+    "name":"Rohit",
+    "age":36,
+    "country":"India",
+    "IPL_team":"Mumbai Indians",
+    "highest_score":264
+    }
+print(f"Python dictionary is \n {dict}")
+print("\ntype now is",type(dict))
+json_string=json.dumps(dict)
+print(f"Python dictionary in json is \n {json_string}")
+print("\ntype now is",type(json_string))
+file_name="python_json_dump.json"
+with open(file_name,"a") as a:
+    a.write(json_string)
+print(f"JSON data saved to '{file_name}' using string method.")
+
+B]Parsing JSON 
+import json
+try:
+        file_name="python_json_dump.json"
+        with open(file_name, 'r') as json_file:
+            player_data = json.load(json_file)
+
+        print("\nJSON Data Successfully Parsed into a Python Dictionary")
+        print(f"Type of loaded data: {type(player_data)}")
+        print(f"Player Name: {player_data['name']}")
+        print(f"Player Age: {player_data['age']}")
+        print(f"IPL Team: {player_data['IPL_team']}")
+except e:
+      print(e)
+
+
+
+C]Persisting JSON 
+import json
+dict={
+    "name":"Rohit",
+    "age":36,
+    "country":"India",
+    "IPL_team":"Mumbai Indians",
+    "highest_score":264
+    }
+from pymongo import MongoClient
+client = MongoClient('mongodb://localhost:27017/') 
+db = client['data=base']  
+collection = db['cric_info']
+result = collection.insert_one(dict)
+print(f"Data persisted to MongoDB. Document ID: {result.inserted_id}")
+client.close()
+
+
+
+D]Export MongoDB to JSON.
+Command:
+mongoexport --db mydatabase --collection users --out users_export.json 
+
+query to delete JSON object from MongoDB.
+use mydatabase
+db.users.deleteOne({"name":"Alice"});
+
+
+
+
+
+
