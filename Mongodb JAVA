@@ -1,5 +1,5 @@
 javac -cp "mongodb-java-driver.jar" QuickStartCRUD.java
-java -cp "mongodb-java-driver.jar" QuickStartCRUD.java
+java -cp ".;mongodb-java-driver.jar" QuickStartCRUD
 
 
 
