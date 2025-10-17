@@ -1,0 +1,63 @@
+javac -cp "mongodb-java-driver.jar" QuickStartCRUD.java
+java -cp "mongodb-java-driver.jar" QuickStartCRUD.java
+
+
+
+
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
+import org.bson.Document;
+import com.mongodb.client.*;
+import com.mongodb.client.result.*;
+
+public class QuickStartCRUD {
+    public static void main(String[] args) {
+
+        // MongoDB connection string for local MongoDB server
+        String uri = "mongodb://localhost:27017";
+
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
+            // Get (or create) the database
+            MongoDatabase database = mongoClient.getDatabase("TY");
+
+            // Get (or create) the collection 
+            MongoCollection<Document> collection = database.getCollection("tys");
+
+            // --- CREATE
+            Document newDoc = new Document("name", "sameul")
+                                    .append("roll", 5)
+                                    .append("city", "oros");
+            collection.insertOne(newDoc);
+            System.out.println("Inserted document: " + newDoc.toJson());
+
+            // --- READ
+            Document foundDoc = collection.find(eq("name", "sameul")).first();
+            if (foundDoc != null) {
+                System.out.println("Found document: " + foundDoc.toJson());
+            } else {
+                System.out.println("No matching documents found.");
+            }
+
+            // --- UPDATE
+            UpdateResult updateResult = collection.updateOne(eq("name", "sameul"), set("city", "kudal"));
+            System.out.println("Matched documents: " + updateResult.getMatchedCount());
+            System.out.println("Modified documents: " + updateResult.getModifiedCount());
+
+            // Verify update
+            Document updatedDoc = collection.find(eq("name", "sameul")).first();
+            System.out.println("Updated document: " + updatedDoc.toJson());
+
+            // --- DELETE
+            DeleteResult deleteResult = collection.deleteOne(eq("name", "sameul"));
+            System.out.println("Deleted documents count: " + deleteResult.getDeletedCount());
+
+            // Verify deletion
+            Document deletedDoc = collection.find(eq("name", "sameul")).first();
+            if (deletedDoc == null) {
+                System.out.println("Document successfully deleted.");
+            } else {
+                System.out.println("Document still exists: " + deletedDoc.toJson());
+            }
+        }
+    }
+}
